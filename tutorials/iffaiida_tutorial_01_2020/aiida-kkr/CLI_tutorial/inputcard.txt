@@ -1,0 +1,25 @@
+# this is an example file of an inputcard that is used to read in the structure and paramters from a file
+
+NSPIN= 1
+LMAX= 2
+
+ALATBASIS= 6.822  # in a_Bohr
+
+BRAVAIS
+0.0 0.5 0.5
+0.5 0.0 0.5
+0.5 0.5 0.0
+
+NAEZ= 1
+
+<RBASIS>      <ZATOM>
+0.0 0.0 0.0     29
+
+RCLUSTZ= 2.3
+
+EMIN    EMAX    TEMPR  NPOL  NPT1  NPT2  NPT3
+-0.4    1.0     500.0   6     4     18    4
+
+
+RMAX=  7
+GMAX= 65
