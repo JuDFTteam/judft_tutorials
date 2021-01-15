@@ -48,12 +48,19 @@ EMIN    EMAX    TEMPR  NPOL  NPT1  NPT2  NPT3
 RMAX=  7
 GMAX= 65
 ```
-into AiiDA nodes (namely StructureData and Dict nodes):
+into AiiDA nodes (namely `StructureData` and `Dict` nodes):
 
 ```shell
 $ aiida-kkr data structure import CLI_tutorial/inputcard.txt --kkrpara 
 Success: stored kkr params Dict node <1965>
 Success: parsed and stored StructureData <1966> with formula Cu
+```
+
+We are going to reuse the structure and parameter nodes we imported. Thus we save them as environment variables:
+
+```shell
+$ export PK_PARA=1965
+$ export PK_STRUC=1966
 ```
 
 ## **Running calculations**
@@ -74,17 +81,26 @@ $ verdi code list
 We start by running the voronoi calulation (see `aiida-kkr voro launch -h` for a description of the inputs):
 ```shell
 $ aiida-kkr launch voro \
-  -s 1966 \
-  -p 1965\
+  -s PK_STRUC \
+  -p PK_PARA\
   -W 300 \
   -Q th1 \
   -v voronoi_intel@iffslurm \
   -d
 Submitted VoronoiCalculation<2209> to the daemon
 ```
-After some time the calculation is finished:
+> __Note:__\
+> Remember to change the pks of the structure and parameters to the output you got from the `aiida-kkr data structure import` command!
+
+It might also be helpful to save the calculation's pk somewhere. For the following we will save it as an environment variable which we call `$PK_PARA`:
 ```shell
-$ verdi node show 2209
+$ export PK_VORO=2209
+```
+
+After some time the calculation is finished. We can see this for instance with the `verdi node show` command (here we reuse our environment variable `PK_VORO`):
+
+```shell
+$ verdi node show $PK_VORO
 Property     Value
 -----------  ------------------------------------
 type         VoronoiCalculation
@@ -121,7 +137,7 @@ A KKRhost calculation requires a previous voronoi calculation to have the starti
 ```shell
 $ aiida-kkr launch kkr \
   -k kkrhost_develop_amd@iffslurm \
-  -p 1965 \
+  -p $PK_PARA \
   --parent-folder 2210 \
   --with-mpi -M 32 \
   -W 3600 \
@@ -129,27 +145,32 @@ $ aiida-kkr launch kkr \
   -Q th1-2020-32 \
   -d
 Submitted KkrCalculation<2218> to the daemon
+
+$ export PK_KKR=2218
 ```
+
+> __Note:__\
+> Remember to change the pk of the `parent-folder` inputs to the output you got from the voronoi calculation.
 
 And once that job finishes we can inspect its outcome or continue calculations from there.
 In the process list we find information on our job:
 
 ```shell
-$ verdi process list -a -p1 | grep 2218
+$ verdi process list -a -p1 | grep $PK_KKR
 2218  29s ago    KkrCalculation          ⏵ Waiting         Waiting for transport task: upload
 ```
 
 after some time the jobs finishes (depending on the availability of the cluster):
 
 ```shell
-$ verdi process list -a -p1 | grep 2218
+$ verdi process list -a -p1 | grep $PK_KKR
 2218  6m ago     KkrCalculation          ⏹ Finished [0]
 ```
 
 and we can take a look at the output:
 
 ```shell
-$ verdi calcjob outputcat 2218 | tail -n20
+$ verdi calcjob outputcat $PK_KKR | tail -n20
  Exited MADELUNG3D
  ++++++++++++++++++++++++++++++++++++++++++++++++++++++
  +++            SCF ITERATIONS START                +++
@@ -196,7 +217,40 @@ You can see that only a single iteration ran because we did not specify `NSTEPS`
 >  res           Print data from the result output Dict node of a calcjob.
 > ```
 
-## **Running an scf workflow**
+## **Running workflows**
+
+### Bandstructure
+
+The command line interface of aiida-kkr also supports some workflows. We first want to use the bandstructure workflow. This takes as input a `remote_folder` of a previous (converged) calculation. For demonstration purposes we continue from our previous KKR calculation although it is not converged yet.
+
+```shell
+$ aiida-kkr launch bs -k kkrhost_develop_amd@iffslurm -P <PARENT-REMOTE-PK> -opt 38f06f41 -d
+```
+    
+> __Note:__\
+> The `opt` input to the bandstructure workflow is the first part of an option Dict node's uuid that is used to identify the node. The iffslurm input from `base_iff` comes with ready-to-use default option nodes that are used in workflows. They define the `queue_name` and default resources for the different architechtures (i.e. node types) of iffslurm.
+>
+> Predefined option nodes:
+>
+> |label  |  uuid  | description|
+> | --- | --- | --- |
+> | `options_iffslurm_oscar_serial`   | `836e5316-d000-498a-aac8-6f86d561ffe9` | `oscar` partition (single core on intel node) without MPI |
+> | `options_iffslurm_oscar` | `3b6c327e-d894-48ef-9f82-b45570149779` | `oscar` partition (12 core intel node) with MPI |
+> | `options_slurm_amd32_serial`   | `51d94945-6f65-46ac-9a87-5e5391192ca8` | `th1-2020-32` partition (single core on AMD node) without MPI |
+> | `options_slurm_amd32`   | `38f06f41-1547-4b34-ae2d-bf9a8ae0c95e` | `th1-2020-32` partition (32 core AMD node) with MPI |
+> | `options_slurm_amd64`   | `83fef094-2e88-4543-94c5-20ac85de2688` | `th1-2020-32` partition (64 core AMD node) with MPI |
+
+    
+We can use the `aiida-kkr plot` tool to visualize the bandstructure (here we add the additional keyword argument `silent=True` to suppress further output to the stdout and `filename=my-plot-name.png` to write a png file called `my-plot.png`):
+    
+```shell
+$ aiida-kkr plot -o silent=True -o filename=my-plot.png 669
+{'silent': True, 'filename': 'my-plot.png'}
+cannot open tk gui, fall back to static image
+saved static plot to  my-plot.png
+```
+
+### self consistency
 
 We now want to use the scf workflow of the KKRhost code. In the previous step we already got the calculation parameters and a structure node which will be inputs to our calculation.
 
@@ -227,7 +281,7 @@ $ verdi data dict show 49cf1dc1
 }
 ```
 
-### Submission of the workflow
+#### Submission of the workflow
 
 We have now collected all the nodes (we will reuse the same nodes as in the calculations part above) we need to submit a self consistency calculation:
 ```shell
