@@ -1,4 +1,4 @@
-# iffaiida tutorial setup from fresh container:
+# iffaiida tutorial setup from a fresh container:
 
 ##  install aiida_nodes if not already there
 check if the `iffdata` command is there and working.
