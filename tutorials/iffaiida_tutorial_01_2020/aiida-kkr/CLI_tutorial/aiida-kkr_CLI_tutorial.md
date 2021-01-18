@@ -1,7 +1,7 @@
-# **AiiDA-KKR command line interface**
+# **AiiDA-KKR command-line interface**
 
 
-The AiiDA-KKR plugin comes with a command line interface that exposes some of it's functionalities.
+The AiiDA-KKR plugin comes with a command-line interface that exposes some of its functionalities.
 
 So far the following commands are available:
 * `aiida-kkr data parameter import` - tool to import calculation parameters from an `inputcard`
@@ -14,15 +14,15 @@ So far the following commands are available:
 * `aiida-kkr launch kkrimpscf` - interface to `kkr_imp_wc` impurity embedding workflow
 * `aiida-kkr plot` - interface to `plot_kkr` tool
 > __Note:__\
-> use the `-h` argument to show a help for these commands and command groups.
+> use the `-h` argument to show help for these commands and command groups.
 
-In the following we will go through some of the CLI tools to demonstrate the usage. In this example we will import data from a sample `inputcard` and run a full scf calculation with the KKRhost code through aiida.
+In the following, we will go through some of the CLI tools to demonstrate the usage. In this example, we will import data from a sample `inputcard` and run a full SCF calculation with the KKRhost code through aiida.
 
 ## **Importing data**
 
-We start with importing the setup of a possible calculation. We will use the `aiida-kkr data structure import` tool to convert this inputcard:
+We start by importing the setup of a possible calculation. We will use the `aiida-kkr data structure import` tool to convert this inputcard:
 ```
-# this is an example file of an inputcard that is used to read in the structure and paramters from a file
+# this is an example file of an inputcard that is used to read in the structure and parameters from a file
 
 NSPIN= 1
 LMAX= 2
@@ -160,7 +160,7 @@ $ verdi process list -a -p1 | grep $PK_KKR
 2218  29s ago    KkrCalculation          ⏵ Waiting         Waiting for transport task: upload
 ```
 
-after some time the jobs finishes (depending on the availability of the cluster):
+after some time the jobs finish (depending on the availability of the cluster):
 
 ```shell
 $ verdi process list -a -p1 | grep $PK_KKR
@@ -214,21 +214,21 @@ You can see that only a single iteration ran because we did not specify `NSTEPS`
 >  inputls       Show the list of the generated calcjob input files.
 >  outputcat     Show the contents of one of the calcjob retrieved outputs.
 >  outputls      Show the list of the retrieved calcjob output files.
->  res           Print data from the result output Dict node of a calcjob.
+>  res           Print data from the resulting output Dict node of a calcjob.
 > ```
 
 ## **Running workflows**
 
 ### Bandstructure
 
-The command line interface of aiida-kkr also supports some workflows. We first want to use the bandstructure workflow. This takes as input a `remote_folder` of a previous (converged) calculation. For demonstration purposes we continue from our previous KKR calculation although it is not converged yet.
+The command-line interface of aiida-kkr also supports some workflows. We first want to use the bandstructure workflow. This takes as input a `remote_folder` of a previous (converged) calculation. For demonstration purposes, we continue from our previous KKR calculation although it is not converged yet.
 
 ```shell
 $ aiida-kkr launch bs -k kkrhost_develop_amd@iffslurm -P <PARENT-REMOTE-PK> -opt 38f06f41 -d
 ```
     
 > __Note:__\
-> The `opt` input to the bandstructure workflow is the first part of an option Dict node's uuid that is used to identify the node. The iffslurm input from `base_iff` comes with ready-to-use default option nodes that are used in workflows. They define the `queue_name` and default resources for the different architechtures (i.e. node types) of iffslurm.
+> The `opt` input to the bandstructure workflow is the first part of an option Dict node's uuid that is used to identify the node. The iffslurm input from `base_iff` comes with ready-to-use default option nodes that are used in workflows. They define the `queue_name` and default resources for the different architectures (i.e. node types) of iffslurm.
 >
 > Predefined option nodes:
 >
@@ -252,9 +252,9 @@ saved static plot to  my-plot.png
 
 ### self consistency
 
-We now want to use the scf workflow of the KKRhost code. In the previous step we already got the calculation parameters and a structure node which will be inputs to our calculation.
+We now want to use the SCF workflow of the KKRhost code. In the previous step, we already got the calculation parameters and a structure node which will be inputs to our calculation.
 
-To find out how to use the scf workflow we have a look at the help of the command line tool: `aiida-kkr launch scf -h`.
+To find out how to use the SCF workflow we have a look at the help of the command line tool: `aiida-kkr launch scf -h`.
 
 In addition to the nodes we used above we need to specify options for the computer (`queue_name` etc.) which come already prepared. The following `Dict` node can be used to run calculations on the `th1` queue:
 ```shell
@@ -283,19 +283,19 @@ $ verdi data dict show 49cf1dc1
 
 #### Submission of the workflow
 
-We have now collected all the nodes (we will reuse the same nodes as in the calculations part above) we need to submit a self consistency calculation:
+We have now collected all the nodes (we will reuse the same nodes as in the calculations part above) we need to submit a self-consistency calculation:
 ```shell
 $ aiida-kkr launch scf -s 1966 -p 1965 -k kkrhost_develop_intel@iffslurm -v voronoi_intel@iffslurm -opt 49cf1dc1 -d
 Submitted kkr_scf_wc<2056> to the daemon
 ```
 > __Note:__\
-> In this example we have used the pk of the structure and parameters, a label for the codes and the short version of the uuid for the options node.
+> In this example we have used the pk of the structure and parameters, a label for the codes, and the short version of the uuid for the options node.
 > 
-> If we had chosed to omit the -d flag the workflow would run in the foreground.
+> If we had chosen to omit the -d flag the workflow would run in the foreground.
 
 ### Checking the progress / output of the workflow
 
-We can use the `verdi process`  and `verdi calcjob` commands of the AiiDA CLI to check on the process of out job.
+We can use the `verdi process`  and `verdi calcjob` commands of the AiiDA CLI to check on the process of our job.
 
 To see all the steps that were already done by the workflow we can do
 ```shell
