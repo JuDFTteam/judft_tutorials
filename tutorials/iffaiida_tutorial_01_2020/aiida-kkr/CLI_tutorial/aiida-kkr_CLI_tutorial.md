@@ -1,3 +1,5 @@
+*If you are new to python and/or AiiDA you may want to look at the [python crash course notebook](../aiida-fleur/0_Python_crash-course_optional_.ipynb) and the [introduction to AiiDA notebook](../aiida-fleur/1_AiiDA_data_types_and_verdi_commands.ipynb) before starting this tutorial.*
+
 # **AiiDA-KKR command-line interface**
 
 
