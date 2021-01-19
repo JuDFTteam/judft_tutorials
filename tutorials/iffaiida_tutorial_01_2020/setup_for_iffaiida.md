@@ -1,5 +1,10 @@
 # iffaiida tutorial setup from a fresh container:
 
+The main task you should do is to use the iffdata command install and configure
+some common aiida-nodes into the database. This will ensure that your work can 
+be better linked to other peoples effort and relieve you from the burden to install
+all computers and settings yourself.
+
 ##  install aiida_nodes if not already there
 check if the `iffdata` command is there and working.
 if not do:
@@ -15,47 +20,26 @@ list registered datasets
 ```
 $ iffdata list
 ```
-confirm aiida is running fine and no codes are yet installed
 
-```
-$ verdi status
-$ verdi code list
-```
-install iff base database
+The basic database with nodes everyone should use is the iff_base database which you should install now:
+
 ```
 $ iffdata import base_iff
 ```
+This command will install some computers and codes we prepared for you. You will be asked to confirm some questions during the installation.
 
-now we have some codes and computers
+After the import finished, you can query the AiiDA database to see your recent imports.
 ```
 $ verdi code list
 $ verdi computer list -a
 ```
-
-check if you can passwordlessly connect to iffslurm and logout from iffslurm again
+You can also test the installation of computers again.
 ```
-ssh iffslurm
-```
-if you had to type a password, add the corresponding ssh key file to the ssh agent.
-check if agent runs and which keys it has stored
-```
-$ ssh-add -L
-```
-if agent is not running: 
-```
-$ eval `ssh-agent -s`
-```
-add your key file to the ssh agent and type in your password
-```
-$ ssh-add path_to_keyfile
-```
-
-Now you have to configure the iffslurm computer in aiida for your user. if in doubt, use default at each prompt.
-```
-$ verdi computer configure ssh iffslurm
 $ verdi computer test iffslurm
 ```
-if all tests are green you are ready to launch workflows and calculations from the command line with aiida-fleur command to iffslurm.
+
+# Fleur specific installation
+If all tests are green you are ready to launch workflows and calculations from the command line with aiida-fleur command to iffslurm.
 If bash/tab completion of aiida-fleur is not enabled yet execute:
 ```
 $ eval "$(_AIIDA_FLEUR_COMPLETE=source aiida-fleur)"
