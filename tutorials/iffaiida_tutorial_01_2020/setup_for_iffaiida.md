@@ -13,7 +13,7 @@ eval "$(_IFFDATA_COMPLETE=source iffdata)"
 # Setup base database
 list registered datasets
 ```
-$ iffdata registry list
+$ iffdata list
 ```
 confirm aiida is running fine and no codes are yet installed
 
@@ -29,15 +29,15 @@ $ iffdata import base_iff
 now we have some codes and computers
 ```
 $ verdi code list
-$ verdi computer list -A
+$ verdi computer list -a
 ```
 
-check if you can passwordless connect to iffslurm and logout from iffslurm again
+check if you can passwordlessly connect to iffslurm and logout from iffslurm again
 ```
 ssh iffslurm
 ```
-if you had to type a password, add the corresponding ssh key file to the ssh agent
-check if agent runs and what keys he has
+if you had to type a password, add the corresponding ssh key file to the ssh agent.
+check if agent runs and which keys it has stored
 ```
 $ ssh-add -L
 ```
@@ -50,7 +50,7 @@ add your key file to the ssh agent and type in your password
 $ ssh-add path_to_keyfile
 ```
 
-Now you have to configure the iffslurm computer in aiida for your user
+Now you have to configure the iffslurm computer in aiida for your user. if in doubt, use default at each prompt.
 ```
 $ verdi computer configure ssh iffslurm
 $ verdi computer test iffslurm
@@ -67,7 +67,7 @@ $ verdi data structure list
 ```
 
 check if the following commands can be executed.
-```
+```shell
 $ aiida-fleur -h
 $ aiida-fleur launch -h
 ```
