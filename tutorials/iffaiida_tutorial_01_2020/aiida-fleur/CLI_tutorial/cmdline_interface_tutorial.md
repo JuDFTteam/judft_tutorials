@@ -153,16 +153,25 @@ If the default option node is enough, or if the options for the default queue st
 
 To submit simulations to the `th1` queue with one node and run with two mpi processes execute. 
     
-    aiida-fleur data options create -q 'th1' -n 1 -m 2
+    aiida-fleur data options create -q 'th1' -N 1 -M 2
 
 To submit simulations to the `th1-2020-32` queue with one node and run with two mpi processes execute. 
     
-    aiida-fleur data options create -q 'th1-2020-32' -n 1 -m 2
+    aiida-fleur data options create -q 'th1-2020-32' -N 1 -M 2
 
-You should some output allow this:
-    
-    output
+You should see some output this:
 
+```
+Success: Created and stored Options node <290>  <99f79d2e-04aa-4aaf-9b5f-9eabad8142d8>
+{
+    "max_wallclock_seconds": 1800,
+    "queue_name": "th1-2020-32",
+    "resources": {
+        "num_machines": 1,
+        "num_mpiprocs_per_machine": 2
+    }
+}
+```
 Remember these pks (further named `opt_th1_pk` and `opt_amd_pk`) we need them further for launching workchains.
 To display the contents of any `aiida.orm.Dict` node you can execute `verdi data dict show <pk>`.
 
