@@ -120,17 +120,17 @@ The `workflow` command group has sub commands to inspect `aiida-fleur` workchain
 
 for example to launch an scf workchain on a given structure execute:
     
-    $ aiida-fleur launch scf -i <inpgenpk> -f <fleurpk> -S <structurepk>
+    $ aiida-fleur launch scf -i <inpgenpk> -f <fleurpk> -s <structurepk>
 
 the command can also process structures in any format `ase` can handle, this includes `Cif`, `xsf` and `poscar` files. In such a case simply parse the path to the file:
 
-    $ aiida-fleur launch scf -i <inpgenpk> -f <fleurpk> -S ./structure/Cu.cif
+    $ aiida-fleur launch scf -i <inpgenpk> -f <fleurpk> -s ./structure/Cu.cif
 
 ## Confirm proper setup:
 Quickly confirm that you have a computer and a code setup within your database.
 
     $ verdi computer list -a
-    $ verdi code list -A
+    $ verdi code list -a
 
 should display some configured computer and codes like this (notice the "`*`"s):
 ```
@@ -180,7 +180,7 @@ To display the contents of any `aiida.orm.Dict` node you can execute `verdi data
 ## Executing inpgen
 First we run a simple inpgen calculation from the command line on a Si structure provided by a cif file in `tutorial_files` folder.
 
-    $ aiida-fleur launch inpgen -i inpgen_MaXR5_th1 -s Si.cif -opt <opt_th1_pk>
+    $ aiida-fleur launch inpgen -i inpgen_MaXR5_th1 -s Si.cif -q th1
 
 The structure is provided via the `-s` option, which can either be an identifier of a `StructureData` node or any supported format by `ase.io` (see https://wiki.fysik.dtu.dk/ase/ase/io/io.html?highlight=formats)
 Among many others this includes:
