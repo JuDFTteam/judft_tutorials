@@ -180,9 +180,9 @@ To display the contents of any `aiida.orm.Dict` node you can execute `verdi data
 ## Executing inpgen
 First we run a simple inpgen calculation from the command line on a Si structure provided by a cif file in `tutorial_files` folder.
 
-    $ aiida-fleur launch inpgen -i inpgen_MaXR5_th1 -S Si.cif -opt <opt_th1_pk>
+    $ aiida-fleur launch inpgen -i inpgen_MaXR5_th1 -s Si.cif -opt <opt_th1_pk>
 
-The structure is provided via the `-S` option, which can either be an identifier of a `StructureData` node or any supported format by `ase.io` (see https://wiki.fysik.dtu.dk/ase/ase/io/io.html?highlight=formats)
+The structure is provided via the `-s` option, which can either be an identifier of a `StructureData` node or any supported format by `ase.io` (see https://wiki.fysik.dtu.dk/ase/ase/io/io.html?highlight=formats)
 Among many others this includes:
 
 ```
@@ -221,12 +221,12 @@ The interface to launch other workflows is very similar to the interface and opt
 This time for each command we execute we add the `-d` option to submit the workflow to the daemon, executing them in the background instead of blocking the interpreter.
 You can launch directly workflows like this 
 ```
-$ aiida-fleur launch scf -d -S Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_th1 -opt <opt_th1_pk>
-$ aiida-fleur launch relax -d -S Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_th1 -opt <opt_th1_pk>
+$ aiida-fleur launch scf -d -s Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_th1 -opt <opt_th1_pk>
+$ aiida-fleur launch relax -d -s Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_th1 -opt <opt_th1_pk>
 ```
 launch an equation of states in the background to a different queue as for the other workflows
 ```
-$ aiida-fleur launch eos -S Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_AMD -opt <opt_amd_pk>
+$ aiida-fleur launch eos -s Si.cif -i inpgen_MaXR5_th1 --fleur fleur_MaXR5_AMD -opt <opt_amd_pk>
 ```
 
 Check with 
