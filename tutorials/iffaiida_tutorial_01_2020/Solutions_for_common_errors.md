@@ -20,7 +20,16 @@ After this run and check if everything is fine now
 ```
 $verdi computer test iffslurm
 ```
-If it says something like key file is encrypted, you have to add the ssh key file you used to the ssh-agent running
+Do not forget to add you key file to the ssh-agent, otherwise, you will run into the next problem.
+
+###  Private key file is encrypted")
+If it says something like 
+```
+ |     raise PasswordRequiredException("Private key file is encrypted")
+ | paramiko.ssh_exception.PasswordRequiredException: Private key file is encrypted
+```
+during computer test or in and `verdi process report` of a job which gets into wait because of submit failures,
+you have to add the ssh key file you used to the ssh-agent running
 ```
 ssh-add `/home/{your-username}/.ssh/id_rsa
 ```
