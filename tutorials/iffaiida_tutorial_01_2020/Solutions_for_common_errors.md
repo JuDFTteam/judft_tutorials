@@ -20,6 +20,11 @@ After this run and check if everything is fine now
 ```
 $verdi computer test iffslurm
 ```
+If it says something like key file is encrypted, you have to add the ssh key file you used to the ssh-agent running
+```
+ssh-add `/home/{your-username}/.ssh/id_rsa
+```
+(type password of the key)
 
 ### If you get an error like:
 ```
