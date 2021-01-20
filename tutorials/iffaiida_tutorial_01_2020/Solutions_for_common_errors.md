@@ -10,8 +10,8 @@
 ```
 Then the prepared (automatic) keyfile setup has not worked for you.
 You still need to configure the computer again per hand with a different key file.
-You might need to the user name and the path to key file. For exmaple `/home/{your-username}/.ssh/id_rsa`
-For this run (confirm that the user name is also right) :
+You might need to change user name and the path to key file. For exmaple `/home/{your-username}/.ssh/id_rsa`
+For this run:
 ```
 $verdi computer configure ssh iffslurm
 
@@ -35,7 +35,7 @@ If you don't want to remove the code, but just to disable it for non-interactive
 in this troubleshooting section of the online documentation: https://bit.ly/2FCRDc5
 ```
 This means you get some output from you .bashrc .profile .bash_profile files on iff slurm all the time when executing an ssh command to iffslurm
-This might go well, but should be circumvented since aiida parses the what the ssh commands return.
+This might go well, but should be circumvented since aiida parses what the ssh commands return. It cannot 'understand the additional' information you print out everytime and it can also not now how this differs from scheduler responses.
 Therefore, solution:
 ```
 ssh iffslurm
