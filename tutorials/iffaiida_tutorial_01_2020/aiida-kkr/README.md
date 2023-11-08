@@ -39,7 +39,7 @@ The aiida-kkr tutorial can then be found in the `AiiDA-Day-Jan21/aiida-kkr/` dir
 4. Import tutorial datasets:
 
 ```
-$ verdi import data/*.aiida
+$ verdi archive import data/*.aiida
 ```
 
 ## Overview of the tutorial
